@@ -8,7 +8,7 @@ const app = express();
 const server = createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: ["http://localhost:3000/, https://bunny-store.vercel.app/"],
+    origin: ["http://localhost:3000", "https://bunny-store.vercel.app"],
     methods: ["GET", "POST"]
   }
 });
