@@ -8,7 +8,7 @@ const app = express();
 const server = createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: ["http://localhost:3000"],
+    origin: ["http://localhost:3000/, https://bunny-store.vercel.app/"],
     methods: ["GET", "POST"]
   }
 });
@@ -19,18 +19,29 @@ app.use(cors())
 app.use(express.static(path.join(__dirname, "public")))
 
 // Socket.IO Connection
-io.on("connection", (socket) => {
-  console.log(`User connected: ${socket.id}`)
+io.on('connection', (socket) => {
+  socket.on('joinRoom', ({id, room}) => {
+    socket.join(room)
+  })
 
-  socket.on("message", (data) => {
-    console.log("Message received:", data)
-    io.emit("message", data)
-  });
+  socket.on('privateMessage', ({ room, message }) => {
+    const id = message.split(':')[0]
+    const msg = message.split(':')[1]
+    io.to(room).to('admin-room').emit('chat-message', id, msg, room)
+  })
 
-  socket.on("disconnect", () => {
-    console.log("User disconnected")
-  });
-});
+  socket.on('heartbeat', () => {
+
+  })
+
+  socket.on('order', () => {
+    io.emit('order')
+  })
+
+  socket.on('account', () => {
+    io.emit('account')
+  })
+})
 
 // Serve an HTML file when accessing "/"
 app.get("/", (req, res) => {
