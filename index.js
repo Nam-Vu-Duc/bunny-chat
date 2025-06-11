@@ -34,8 +34,8 @@ io.on('connection', (socket) => {
 
   })
 
-  socket.on('order', () => {
-    io.emit('order')
+  socket.on('order', ({ id }) => {
+    io.emit('order', id)
   })
 
   socket.on('account', () => {
