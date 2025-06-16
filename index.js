@@ -5,7 +5,7 @@ const cors = require("cors")
 const path = require("path")
 
 const app = express();
-const server = createServer(app);
+const server = createServer(app)
 const io = new Server(server, {
   cors: {
     origin: [
@@ -31,6 +31,12 @@ io.on('connection', (socket) => {
     const id = message.split(':')[0]
     const msg = message.split(':')[1]
     io.to(room).to('admin-room').emit('chat-message', id, msg, room)
+  })
+
+  socket.on('privateMessageEmp', ({ room, message }) => {
+    const id = message.split(':')[0]
+    const msg = message.split(':')[1]
+    io.to(room).to('emp-room').emit('chat-message', id, msg, room)
   })
 
   socket.on('heartbeat', () => {
