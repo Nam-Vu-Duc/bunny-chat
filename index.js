@@ -11,7 +11,7 @@ const io = new Server(server, {
     origin: [
       "http://localhost:3000", 
       "https://bunny-store.vercel.app", 
-      "https://cosmetic-garden.vercel.app"],
+    ],
     methods: ["GET", "POST"]
   }
 });
